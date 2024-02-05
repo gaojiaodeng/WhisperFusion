@@ -314,18 +314,19 @@ class TensorRTLLMEngine:
             # if self.eos:
             if output is not None:
                 output[0] = clean_llm_output(output[0])
-                self.last_output = output
-                self.last_prompt = prompt
-                llm_queue.put({
-                    "uid": transcription_output["uid"],
-                    "llm_output": output,
-                    "eos": self.eos,
-                    "latency": self.infer_time
-                })
-                audio_queue.put({"llm_output": output, "eos": self.eos})
-                logging.info(f"nathan test output size:{len(output)},output: {output[0]}")
-                logging.info(f"nathan test output0 size:{len(output[0])}")
-                logging.info(f"[LLM INFO:] Output(nathan test): {output[0]}\nLLM inference done in {self.infer_time} ms\n\n")
+                if len(output[0]) > 0:
+                    self.last_output = output
+                    self.last_prompt = prompt
+                    llm_queue.put({
+                        "uid": transcription_output["uid"],
+                        "llm_output": output,
+                        "eos": self.eos,
+                        "latency": self.infer_time
+                    })
+                    audio_queue.put({"llm_output": output, "eos": self.eos})
+                    logging.info(f"nathan test output size:{len(output)},output: {output[0]}")
+                    logging.info(f"nathan test output0 size:{len(output[0])}")
+                    logging.info(f"[LLM INFO:] Output(nathan test): {output[0]}\nLLM inference done in {self.infer_time} ms\n\n")
             
             if self.eos:
                 conversation_history[transcription_output["uid"]].append(
