@@ -390,6 +390,7 @@ class ServeClient:
                             )
                             
                         self.transcription_queue.put({"uid": self.client_uid, "prompt": self.prompt, "eos": self.eos})
+                        logging.info(f"[Whisper INFO]: put prompt {self.prompt}")
                         if self.eos:
                             self.timestamp_offset += duration
                             logging.info(f"[Whisper INFO]: {self.prompt}, eos: {self.eos}")

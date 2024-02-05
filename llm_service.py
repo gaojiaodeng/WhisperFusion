@@ -150,6 +150,7 @@ class TensorRTLLMEngine:
         batch_size, num_beams, _ = output_ids.size()
         for batch_idx in range(batch_size):
             if transcription_queue.qsize() != 0:
+                logging.info(f"[LLM INFO:] decode_tokens transcription_queue is not empty")
                 return None
 
             inputs = output_ids[batch_idx][0][:input_lengths[batch_idx]].tolist()
@@ -157,6 +158,7 @@ class TensorRTLLMEngine:
             output = []
             for beam in range(num_beams):
                 if transcription_queue.qsize() != 0:
+                    logging.info(f"[LLM INFO:] decode_tokens transcription_queue is not empty")
                     return None
 
                 output_begin = input_lengths[batch_idx]
@@ -234,7 +236,7 @@ class TensorRTLLMEngine:
                         "latency": self.infer_time
                     })
                     audio_queue.put({"llm_output": self.last_output, "eos": self.eos})
-                    if len(conversation_history[transcription_output["uid"]]) > 5:
+                    if len(conversation_history[transcription_output["uid"]]) > 10:
                         conversation_history[transcription_output["uid"]].pop()
                     conversation_history[transcription_output["uid"]].append(
                         (transcription_output['prompt'].strip(), self.last_output[0].strip())
@@ -295,6 +297,7 @@ class TensorRTLLMEngine:
                 
                 # Interrupted by transcription queue
                 if output is None:
+                    logging.info(f"[LLM INFO:] output is None 300")
                     continue
             else:
                 output_ids = outputs['output_ids']
@@ -329,8 +332,12 @@ class TensorRTLLMEngine:
                     logging.info(f"nathan test output size:{len(output)},output: {output[0]}")
                     logging.info(f"nathan test output0 size:{len(output[0])}")
                     logging.info(f"[LLM INFO:] Output(nathan test): {output[0]}\nLLM inference done in {self.infer_time} ms\n\n")
+                else:
+                    logging.info(f"[LLM INFO:] output is None 336")
             
             if self.eos:
+                if len(conversation_history[transcription_output["uid"]]) > 10:
+                    conversation_history[transcription_output["uid"]].pop()
                 conversation_history[transcription_output["uid"]].append(
                     (transcription_output['prompt'].strip(), output[0].strip())
                 )
