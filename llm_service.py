@@ -324,6 +324,7 @@ class TensorRTLLMEngine:
                 })
                 audio_queue.put({"llm_output": output, "eos": self.eos})
                 logging.info(f"nathan test output size:{len(output)},output: {output[0]}")
+                logging.info(f"nathan test output0 size:{len(output[0])}")
                 logging.info(f"[LLM INFO:] Output(nathan test): {output[0]}\nLLM inference done in {self.infer_time} ms\n\n")
             
             if self.eos:
