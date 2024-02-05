@@ -207,7 +207,7 @@ class TensorRTLLMEngine:
             tokenizer_path,
         )
         
-        logging.info("[LLM INFO:] Loaded LLM TensorRT Engine.")
+        logging.info("[LLM INFO:] Loaded LLM TensorRT Engine.test nathan")
 
         conversation_history = {}
 
@@ -323,7 +323,7 @@ class TensorRTLLMEngine:
                     "latency": self.infer_time
                 })
                 audio_queue.put({"llm_output": output, "eos": self.eos})
-                logging.info(f"[LLM INFO:] Output: {output[0]}\nLLM inference done in {self.infer_time} ms\n\n")
+                logging.info(f"[LLM INFO:] Output(nathan test): {output[0]}\nLLM inference done in {self.infer_time} ms\n\n")
             
             if self.eos:
                 conversation_history[transcription_output["uid"]].append(
