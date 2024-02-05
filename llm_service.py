@@ -234,6 +234,8 @@ class TensorRTLLMEngine:
                         "latency": self.infer_time
                     })
                     audio_queue.put({"llm_output": self.last_output, "eos": self.eos})
+                    if len(conversation_history[transcription_output["uid"]]) > 5:
+                        conversation_history[transcription_output["uid"]].pop()
                     conversation_history[transcription_output["uid"]].append(
                         (transcription_output['prompt'].strip(), self.last_output[0].strip())
                     )
