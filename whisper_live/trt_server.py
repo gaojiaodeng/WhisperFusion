@@ -338,8 +338,8 @@ class ServeClient:
                         llm_response = self.llm_queue.get()
                     
                     if llm_response:
-                        eos = llm_response["eos"]
-                        if eos:
+                        llm_eos = llm_response["eos"]
+                        if llm_eos:
                             self.websocket.send(json.dumps(llm_response))
             except queue.Empty:
                 pass
@@ -375,6 +375,7 @@ class ServeClient:
 
                 segments = []
                 if len(last_segment):
+                    logging.info(f"[nathan test] last_segment: {last_segment}")
                     segments.append({"text": last_segment})
                     try:
                         self.prompt = ' '.join(segment['text'] for segment in segments)
